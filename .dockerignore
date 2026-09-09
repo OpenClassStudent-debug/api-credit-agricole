@@ -1,4 +1,19 @@
-# Python
+# Empêcher la copie du fichier .env dans l'image Docker
+.env
+.env.local
+.env.production
+.env.development
+
+# Empêcher la copie des données sensibles
+data/
+downloads/
+output/
+logs/
+*.xlsx
+*.pdf
+*.csv
+
+# Python caches
 __pycache__/
 *.py[cod]
 *$py.class
@@ -22,10 +37,6 @@ downloads/
 .gitignore
 .gitattributes
 
-# Logs
-logs/
-*.log
-
 # Docker
 .dockerignore
 docker-compose*.yml
@@ -36,6 +47,5 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Ne pas exclure les fichiers de données générés car ils sont montés sur un volume
-# data/
-# *.xlsx 
+# n8n backups (vu dans ton onglet Google Drive)
+n8n_backups/

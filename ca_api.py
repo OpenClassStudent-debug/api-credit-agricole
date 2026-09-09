@@ -203,7 +203,7 @@ async def download_statements(request: DownloadRequest = Body(...)):
     - force: Force le téléchargement même si le fichier existe déjà
     """
     try:
-        logger.info(f"Début de téléchargement avec les paramètres: {request.dict()}")
+        logger.info(f"Début de téléchargement avec les paramètres: {request.model_dump()}")
         cmd = [sys.executable, "get_credit_agricole.py"]
         
         # Ajouter les paramètres optionnels s'ils sont présents
@@ -406,7 +406,7 @@ async def process_statements(request: ProcessRequest = Body(...)):
     - file_path: Chemin du fichier à traiter (optionnel)
     """
     try:
-        logger.info(f"Début de traitement avec les paramètres: {request.dict()}")
+        logger.info(f"Début de traitement avec les paramètres: {request.model_dump()}")
         cmd = [sys.executable, "process_ca_pdf.py"]
         
         if request.file_path:
@@ -509,7 +509,7 @@ async def validate_request(request_type: str = Body(...), data: dict = Body(...)
             return {
                 "status": "valid",
                 "message": "La requête de téléchargement est valide",
-                "parsed_data": request.dict()
+                "parsed_data": request.model_dump()
             }
         elif request_type == "process":
             # Valider la requête de traitement
@@ -517,7 +517,7 @@ async def validate_request(request_type: str = Body(...), data: dict = Body(...)
             return {
                 "status": "valid",
                 "message": "La requête de traitement est valide",
-                "parsed_data": request.dict()
+                "parsed_data": request.model_dump()
             }
         else:
             raise HTTPException(

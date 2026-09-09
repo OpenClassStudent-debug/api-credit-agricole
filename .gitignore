@@ -1,13 +1,50 @@
-.venv
+# Environnements virtuels
+.venv/
+env/
+ENV/
+.venv/
+
+# Fichiers d'environnement (identifiants Crédit Agricole)
 .env
-__pycache__
+.env.local
+.env.production
+.env.development
+
+# Caches Python
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.pyw
 *.pyz
-tva_rules.json
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Données sensibles (relevés bancaires, exports)
 data/
+downloads/
+output/
+logs/
+*.xlsx
+*.pdf
+*.csv
+
+# Fichiers de logs
 *.log
 api_debug.log
+
+# Dossiers comptables
 Compta/
+
+# IDE / éditeurs
+.vscode/
+.idea/
+
+# Temp files
+.DS_Store
+Thumbs.db
+
+# n8n backups
+n8n_backups/
+api_debug.log

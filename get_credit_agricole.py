@@ -1,9 +1,7 @@
 import os
 import sys
-from types import MethodType
 import argparse
 import ca_common
-
 
 def main():
     # Analyse des arguments en ligne de commande
@@ -31,7 +29,11 @@ def main():
     file_extension = ca_common.get_file_extension()
     
     # Conversion du mot de passe en liste d'entiers
-    password = [int(digit) for digit in password_str] if password_str else []
+    try:
+        password = [int(digit) for digit in password_str] if password_str else []
+    except ValueError:
+        print("Erreur: CA_PASSWORD doit contenir uniquement des chiffres")
+        sys.exit(1)
     
     # Récupération de la liste des comptes et filtrage si nécessaire
     all_accounts = ca_common.get_account_numbers()

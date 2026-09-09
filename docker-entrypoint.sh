@@ -1,56 +1,56 @@
 #!/bin/bash
 set -e
 
-# Configuration de l'environnement
-echo "Configuration de l'environnement pour l'API Crédit Agricole..."
+echo "Initialisation de l'API Crédit Agricole..."
 
-# Créer les répertoires nécessaires s'ils n'existent pas
-mkdir -p /data/output
-mkdir -p /data/logs
-
-# Vérifier si le fichier .env existe, sinon en créer un par défaut
-if [ ! -f ".env" ]; then
-    echo "Création d'un fichier .env par défaut..."
-    cat > .env << EOF
-# Informations d'identification Crédit Agricole
-CA_USERNAME=
-CA_PASSWORD=
-CA_DEPARTMENT=
-
-# Chemins de fichiers
-CA_BASE_PATH=/data
-CA_DOWNLOAD_PATH=
-CA_OUTPUT_DIR=
-
-# Configuration des comptes
-CA_ACCOUNTS=
-
-# Format du fichier à télécharger (xlsx, pdf, csv)
-CA_FILE_EXTENSION=xlsx
-
-# Clés API
-API_KEY=
-DEBUG_MODE=False
-EOF
-    echo "Fichier .env créé. Veuillez le configurer avec vos informations."
+#############################################
+# 1. Vérifier la présence du fichier .env
+#############################################
+if [ ! -f "/app/.env" ]; then
+    echo "❌ ERREUR : Aucun fichier .env trouvé dans /app"
+    echo "➡️  Fournissez un fichier .env via docker-compose :"
+    echo "    env_file:"
+    echo "      - .env"
+    exit 1
 fi
 
-# Tester les dépendances Python
-echo "Vérification des dépendances Python..."
-pip list
+#############################################
+# 2. Vérifier les variables essentielles
+#############################################
+required_vars=("CA_USERNAME" "CA_PASSWORD" "CA_API_KEY" "CA_BASE_PATH")
+for var in "${required_vars[@]}"; do
+    if [ -z "${!var}" ]; then
+        echo "❌ ERREUR : La variable d'environnement $var n'est pas définie."
+        echo "➡️  Vérifiez votre fichier .env ou docker-compose.yml"
+        exit 1
+    fi
+done
 
-# Vérifier si on peut lancer en mode API ou CLI
-if [ "$1" = "api" ]; then
-    echo "Démarrage en mode API..."
-    exec uvicorn ca_api:app --host 0.0.0.0 --port 8000 --reload
-elif [ "$1" = "download" ]; then
-    echo "Exécution du téléchargement des relevés..."
-    exec python get_credit_agricole.py "${@:2}"
-elif [ "$1" = "process" ]; then
-    echo "Traitement des relevés téléchargés..."
-    exec python process_ca_pdf.py "${@:2}"
-else
-    # Mode par défaut: API
-    echo "Démarrage de l'API Crédit Agricole..."
-    exec uvicorn ca_api:app --host 0.0.0.0 --port 8000
-fi 
+#############################################
+# 3. Créer les dossiers nécessaires dans /data
+#############################################
+mkdir -p "$CA_BASE_PATH/output"
+mkdir -p "$CA_BASE_PATH/logs"
+mkdir -p "$CA_BASE_PATH/downloads"
+
+#############################################
+# 4. Mode API / CLI
+#############################################
+case "$1" in
+    api)
+        echo "Démarrage en mode API..."
+        exec uvicorn ca_api:app --host 0.0.0.0 --port 8000
+        ;;
+    download)
+        echo "Téléchargement des relevés..."
+        exec python get_credit_agricole.py "${@:2}"
+        ;;
+    process)
+        echo "Traitement des relevés..."
+        exec python process_ca_pdf.py "${@:2}"
+        ;;
+    *)
+        echo "Démarrage de l'API Crédit Agricole..."
+        exec uvicorn ca_api:app --host 0.0.0.0 --port 8000
+        ;;
+esac
