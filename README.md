@@ -27,7 +27,7 @@ Cette API permet d'automatiser la gestion des relevés bancaires du Crédit Agri
 
 1. Clonez ce dépôt :
    ```bash
-   git clone https://github.com/kapwebdr/api-credit-agricole.git
+   git clone https://github.com/OpenClassStudent-debug/api-credit-agricole.git
    cd api-credit-agricole
    ```
 
@@ -41,6 +41,10 @@ Cette API permet d'automatiser la gestion des relevés bancaires du Crédit Agri
    cp .env.example .env
    nano .env
    ```
+ℹ️ Ce dépôt est un fork du projet original `kapwebdr/api-credit-agricole`, avec :
+- amélioration du logging et de la gestion des erreurs,
+- refactor du script `docker-entrypoint.sh`,
+- mise en place d’un workflow Git structuré (main / dev / feature).
 
 ### Installation avec Docker
 
@@ -83,6 +87,10 @@ CA_ACCOUNT_NUMBERS=compte1,compte2,compte3
 # Chemin pour stocker les fichiers
 CA_BASE_PATH=/chemin/vers/dossier/compta
 CA_FILE_EXTENSION=xlsx
+CA_DOWNLOAD_PATH=/data/downloads
+CA_OUTPUT_PATH=/data/output
+CA_OUTPUT_DIR=/data/output
+CA_OUTPUT_FILE_NAME=output.xlsx
 
 # Sécurité API
 CA_API_KEY=votre_cle_api_secrete
@@ -275,6 +283,21 @@ Pour résoudre ce problème :
    - Utilisez les informations de la synthèse pour votre déclaration
    - Conservez les fichiers générés comme justificatifs
 
+## 🔄 Workflow Git (fork)
+
+Ce fork utilise un workflow Git structuré :
+
+- `main` — branche stable
+- `dev` — intégration et refactors
+- `feature/*` — une branche par fonctionnalité
+
+Exemple :
+
+```bash
+git checkout dev
+git checkout -b feature/ma-fonctionnalite
+git push origin feature/ma-fonctionnalite
+
 ## 🛡️ Sécurité
 
 - L'API est protégée par une clé d'API
@@ -293,4 +316,18 @@ Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou un
 
 ## 📄 Licence
 
+## 🔄 Workflow Git (fork)
+
+Ce fork utilise un workflow Git structuré :
+
+- `main` — branche stable
+- `dev` — intégration et refactors
+- `feature/*` — une branche par fonctionnalité
+
+Exemple :
+
+```bash
+git checkout dev
+git checkout -b feature/ma-fonctionnalite
+git push origin feature/ma-fonctionnalite
 Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails. 
