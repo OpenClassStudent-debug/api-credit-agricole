@@ -73,6 +73,11 @@ docker-compose down
 
 ## ⚙️ Configuration
 
+# Créer les fichiers downloads et output dans le dossier data dans votre projet
+
+mkdir -p data/downloads
+mkdir -p data/output 
+
 ### Fichier d'environnement (.env)
 
 Le fichier `.env` doit contenir les informations suivantes :
@@ -87,9 +92,8 @@ CA_ACCOUNT_NUMBERS=compte1,compte2,compte3
 # Chemin pour stocker les fichiers
 CA_BASE_PATH=/chemin/vers/dossier/compta
 CA_FILE_EXTENSION=xlsx
-CA_DOWNLOAD_PATH=/data/downloads
-CA_OUTPUT_PATH=/data/output
-CA_OUTPUT_DIR=/data/output
+CA_DOWNLOAD_PATH=./data/downloads
+CA_OUTPUT_DIR=./data/output
 CA_OUTPUT_FILE_NAME=output.xlsx
 
 # Sécurité API
